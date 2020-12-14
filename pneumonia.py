@@ -1,21 +1,23 @@
 from matplotlib import pyplot as plt
+import tensorflow as tf
 from keras.models import Sequential
 from keras.layers import Conv2D, Dropout, MaxPooling2D, Dense, Flatten, Layer
 from keras.utils import Sequence
 from keras.preprocessing.image import ImageDataGenerator
 
+
 class MyDense(Layer):
     def __init__(self, num_outputs):
-        #TODO
-        return
+        super(MyDense, self).__init__()
+        self.num_outputs = num_outputs
 
     def build(self, input_shape):
-        #TODO
-        return
+        self.kernel = self.add_weight("kernel",
+                                      shape=[int(input_shape[-1]),
+                                             self.num_outputs])
 
-    def __call__(self, input):
-        #TODO
-        return
+    def call(self, input):
+        return tf.matmul(input, self.kernel)
 
 
 class MyConv(Layer):
