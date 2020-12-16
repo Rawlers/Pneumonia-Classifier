@@ -88,9 +88,12 @@ def create_model():
     model.add(MaxPooling2D((2, 2)))
 
     model.add(Flatten())
-    model.add(Dense(units=512, activation="relu"))
-    model.add(Dense(units=512, activation="relu"))
-    model.add(Dense(units=2, activation="softmax"))
+    model.add(MyDense(512))
+    model.add(MyDense(512))
+    model.add(MyDense(2))
+    #model.add(Dense(units=512, activation="relu"))
+    #model.add(Dense(units=512, activation="relu"))
+    #model.add(Dense(units=2, activation="softmax"))
 
     model.compile(optimizer='rmsprop', loss='binary_crossentropy', metrics=['accuracy'])
     return model
@@ -101,8 +104,8 @@ def fit_model():
     train_datagen = ImageDataGenerator(rescale=1.0/255, width_shift_range=0.1, height_shift_range=0.1, horizontal_flip=True)
     val_datagen = ImageDataGenerator(rescale=1.0/255)
 
-    train = train_datagen.flow_from_directory('dataset/train/', class_mode='binary', batch_size=16, target_size=(150, 150))
-    validation = val_datagen.flow_from_directory('dataset/validation/', class_mode='binary', batch_size=16, target_size=(150, 150))
+    train = train_datagen.flow_from_directory('filtered/train', class_mode='binary', batch_size=16, target_size=(150, 150))
+    validation = val_datagen.flow_from_directory('filtered/validation', class_mode='binary', batch_size=16, target_size=(150, 150))
 
     model = model.fit(train, validation_data=validation, epochs=30)
     return model
